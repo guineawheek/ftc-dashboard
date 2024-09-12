@@ -1,9 +1,6 @@
 name: "Build FtcRobotController APK"
 on:
-  workflow_dispatch:
   push:
-    tags:
-      -'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   build-apk:
