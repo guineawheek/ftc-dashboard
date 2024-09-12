@@ -18,8 +18,10 @@ jobs:
       uses: android-actions/setup-android@v3
     - name: Compile TeamCode
       run: ./gradlew assembleRelease
+    - name: Finalize robot controller APK
+      run: mv TeamCode/build/outputs/apk/release/TeamCode-release.apk FtcRobotController-FtcDashboard-${{github.ref_name}}.apk
     - name: Upload robot controller APK
       uses: actions/upload-artifact@v4
       with:
         name: FtcRobotController-FtcDashboard-${{github.ref_name}}.apk
-        path: TeamCode/build/outputs/apk/release/TeamCode-release.apk
+        path: FtcRobotController-FtcDashboard-${{github.ref_name}}.apk
