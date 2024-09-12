@@ -1,11 +1,11 @@
-name: "Build FtcRobotController APK"
+name: "Build OnBot Resources"
 on:
   push:
   pull_request:
 
 jobs:
   build-apk:
-    name: "Build FtcRobotController APK"
+    name: "Build FtcRobotController APK and AAR"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -16,12 +16,14 @@ jobs:
         distribution: 'temurin'
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
-    - name: Compile TeamCode
+    - name: Compile TeamCode and Dashboard AAR
       run: ./gradlew assembleRelease
+    - name: Finalize FTC Dashboard AAR
+      run: mkdir -p output && cp FtcDashboard/build/outputs/aar/FtcDashboard-release.aar output/FtcDashboard-${{github.ref_name}}.aar
     - name: Finalize robot controller APK
-      run: mv TeamCode/build/outputs/apk/release/TeamCode-release.apk FtcRobotController-FtcDashboard-${{github.ref_name}}.apk
-    - name: Upload robot controller APK
+      run: cp TeamCode/build/outputs/apk/release/TeamCode-release.apk output/FtcRobotController-FtcDashboard-${{github.ref_name}}.apk
+    - name: Upload assets
       uses: actions/upload-artifact@v4
       with:
-        name: FtcRobotController-FtcDashboard-${{github.ref_name}}.apk
-        path: FtcRobotController-FtcDashboard-${{github.ref_name}}.apk
+        name: FtcDashboard-${{github.ref_name}}
+        path: output
